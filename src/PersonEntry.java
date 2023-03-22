@@ -12,8 +12,11 @@ public class PersonEntry extends JFrame {
 
     private JPanel pnlCommand;
     private JPanel pnlDisplay;
+    private final PersonListing personListing;
 
-    public PersonEntry() {
+    public PersonEntry(PersonListing personListing) {
+        this.personListing = personListing;
+
         setTitle("Entering new person");
         pnlCommand = new JPanel();
         pnlDisplay = new JPanel();

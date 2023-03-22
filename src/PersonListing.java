@@ -64,6 +64,7 @@ public class PersonListing extends JPanel {
         cmdClose = new JButton("Close");
 
         cmdClose.addActionListener(new CloseButtonListener());
+        cmdAddPerson.addActionListener(new AddPersonButtonListener(this));
 
 
         pnlCommand.add(cmdAddPerson);
@@ -73,9 +74,7 @@ public class PersonListing extends JPanel {
     }
 
     private void showTable(ArrayList<Person> plist) {
-        if (plist.size() > 0)
-            addToTable(plist.get(0));
-
+        plist.forEach(this::addToTable);
     }
 
     private void addToTable(Person p) {
@@ -103,11 +102,7 @@ public class PersonListing extends JPanel {
     public static void main(String[] args) {
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
-            }
-        });
+        javax.swing.SwingUtilities.invokeLater(PersonListing::createAndShowGUI);
     }
 
     public void addPerson(Person p) {
@@ -145,7 +140,21 @@ public class PersonListing extends JPanel {
         public void actionPerformed(ActionEvent e) {
             System.exit(0);
         }
+    }
 
+    private class AddPersonButtonListener implements ActionListener {
+        private final PersonListing personListing;
+
+
+        public AddPersonButtonListener(PersonListing personListing) {
+            super();
+            this.personListing = personListing;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            new PersonEntry(personListing);
+        }
     }
 
 }
