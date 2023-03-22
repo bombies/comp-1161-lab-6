@@ -30,7 +30,7 @@ public class Person extends BasePerson implements Comparable<Person> {
     }
 
     public int compareTo(Person other) {
-        return other.getId() - this.getId();
+        return this.getAge() - other.getAge();
     }
 
 }

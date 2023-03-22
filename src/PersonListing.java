@@ -2,28 +2,23 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Comparator;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.JButton;
-import javax.swing.table.*;
 import javax.swing.table.DefaultTableModel;
-import java.util.Comparator;
-import java.util.Collections;
-import java.awt.Color;
 
 
 public class PersonListing extends JPanel {
     private JButton cmdAddPerson;
     private JButton cmdClose;
     private JButton cmdSortAge;
+    private JButton cmdSortFirstName;
 
     private JPanel pnlCommand;
     private JPanel pnlDisplay;
@@ -60,14 +55,30 @@ public class PersonListing extends JPanel {
 
 
         cmdAddPerson = new JButton("Add Person");
+        cmdSortFirstName = new JButton("Sort by First Name");
         cmdSortAge = new JButton("Sort by Age");
         cmdClose = new JButton("Close");
 
+        cmdAddPerson.setBackground(Color.PINK);
+        cmdSortFirstName.setBackground(Color.PINK);
+        cmdSortAge.setBackground(Color.PINK);
+        cmdClose.setBackground(Color.PINK);
+
         cmdClose.addActionListener(new CloseButtonListener());
         cmdAddPerson.addActionListener(new AddPersonButtonListener(this));
+        cmdSortAge.addActionListener((event) -> {
+            model.setRowCount(0);
+            showTable(new ArrayList<>(plist.stream().sorted().toList()));
+        });
+        cmdSortFirstName.addActionListener((event) -> {
+            model.setRowCount(0);
+            showTable(new ArrayList<>(plist.stream().sorted(Comparator.comparing(Person::getName)).toList()));
+        });
 
 
         pnlCommand.add(cmdAddPerson);
+        pnlCommand.add(cmdSortFirstName);
+        pnlCommand.add(cmdSortAge);
         pnlCommand.add(cmdClose);
 
         add(pnlCommand);
