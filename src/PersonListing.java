@@ -21,68 +21,67 @@ import java.awt.Color;
 
 
 public class PersonListing extends JPanel {
-    private JButton     cmdAddPerson;
-    private JButton     cmdClose;
-    private JButton     cmdSortAge;
-  
-    private JPanel      pnlCommand;
-    private JPanel      pnlDisplay;
+    private JButton cmdAddPerson;
+    private JButton cmdClose;
+    private JButton cmdSortAge;
+
+    private JPanel pnlCommand;
+    private JPanel pnlDisplay;
     private ArrayList<Person> plist;
     private PersonListing thisForm;
-    private  JScrollPane scrollPane;
+    private JScrollPane scrollPane;
 
     private JTable table;
     private DefaultTableModel model;
 
     public PersonListing() {
-        super(new GridLayout(2,1));
+        super(new GridLayout(2, 1));
         thisForm = this;
-        
+
 
         pnlCommand = new JPanel();
         pnlDisplay = new JPanel();
 
-        plist= loadPersons("person.dat");
-        String[] columnNames=  {"First Name",
+        plist = loadPersons("person.dat");
+        String[] columnNames = {"First Name",
                 "Last Name",
                 "Age",
                 "Will Publish"};
-        model=new DefaultTableModel(columnNames,0);
+        model = new DefaultTableModel(columnNames, 0);
         table = new JTable(model);
         showTable(plist);
 
-        table.setPreferredScrollableViewportSize(new Dimension(500, plist.size()*15 +50));
+        table.setPreferredScrollableViewportSize(new Dimension(500, plist.size() * 15 + 50));
         table.setFillsViewportHeight(true);
 
         scrollPane = new JScrollPane(table);
-       
+
         add(scrollPane);
 
-       
-        cmdAddPerson  = new JButton("Add Person");
-        cmdSortAge  = new JButton("Sort by Age");
-        cmdClose   = new JButton("Close");
+
+        cmdAddPerson = new JButton("Add Person");
+        cmdSortAge = new JButton("Sort by Age");
+        cmdClose = new JButton("Close");
 
         cmdClose.addActionListener(new CloseButtonListener());
-        
-        
+
+
         pnlCommand.add(cmdAddPerson);
         pnlCommand.add(cmdClose);
-       
+
         add(pnlCommand);
     }
 
-    private void showTable(ArrayList<Person> plist)
-    {
-       if (plist.size()>0)
-         addToTable(plist.get(0));
+    private void showTable(ArrayList<Person> plist) {
+        if (plist.size() > 0)
+            addToTable(plist.get(0));
 
     }
-    private void addToTable(Person p)
-    {
-        String[] name= p.getName().split(" ");
-        String[] item={name[0],name[1],""+ p.getAge(),""+p.getPublish()};
-        model.addRow(item);        
+
+    private void addToTable(Person p) {
+        String[] name = p.getName().split(" ");
+        String[] item = {name[0], name[1], "" + p.getAge(), "" + p.getPublish()};
+        model.addRow(item);
 
     }
 
@@ -105,53 +104,45 @@ public class PersonListing extends JPanel {
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    createAndShowGUI();
-                }
-            });
+            public void run() {
+                createAndShowGUI();
+            }
+        });
     }
 
-    public void addPerson(Person p)
-    {
+    public void addPerson(Person p) {
         plist.add(p);
         addToTable(p);
 
     }
 
-    private ArrayList<Person> loadPersons(String pfile)
-    {
+    private ArrayList<Person> loadPersons(String pfile) {
         Scanner pscan = null;
         ArrayList<Person> plist = new ArrayList<Person>();
-        try
-        {
-            pscan  = new Scanner(new File(pfile));
-            while(pscan.hasNext())
-            {
-                String [] nextLine = pscan.nextLine().split(" ");
-                String name = nextLine[0]+ " " + nextLine[1];
+        try {
+            pscan = new Scanner(new File(pfile));
+            while (pscan.hasNext()) {
+                String[] nextLine = pscan.nextLine().split(" ");
+                String name = nextLine[0] + " " + nextLine[1];
                 int age = Integer.parseInt(nextLine[2]);
                 boolean publish = false;
                 if (nextLine[3].equals("0"))
                     publish = false;
                 else
-                    publish =true;
+                    publish = true;
                 Person p = new Person(name, age, publish);
                 plist.add(p);
             }
 
             pscan.close();
+        } catch (IOException e) {
         }
-        catch(IOException e)
-        {}
         return plist;
     }
 
 
-
-    private class CloseButtonListener implements ActionListener
-    {
-        public void actionPerformed(ActionEvent e)
-        {
+    private class CloseButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
             System.exit(0);
         }
 
