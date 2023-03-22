@@ -9,9 +9,12 @@ public class PersonEntry extends JFrame {
     private JButton cmdSave;
     private JButton cmdClose;
     private JButton cmdClearAll;
+    private JLabel publishLabel;
+    private JCheckBox publishCheckBox;
 
     private JPanel pnlCommand;
     private JPanel pnlDisplay;
+
     private final PersonListing personListing;
 
     public PersonEntry(PersonListing personListing) {
@@ -26,10 +29,32 @@ public class PersonEntry extends JFrame {
         pnlDisplay.add(new JLabel("Age:"));
         txtAge = new JTextField(3);
         pnlDisplay.add(txtAge);
-        pnlDisplay.setLayout(new GridLayout(2, 4));
+        publishLabel = new JLabel("Will Publish?");
+        publishCheckBox = new JCheckBox();
+        pnlDisplay.add(publishLabel);
+        pnlDisplay.add(publishCheckBox);
+        pnlDisplay.setLayout(new GridLayout(3, 2));
 
         cmdSave = new JButton("Save");
         cmdClose = new JButton("Close");
+        cmdSave.addActionListener((event) -> {
+            try {
+                final var name = this.txtName.getText();
+                final var age = Integer.parseInt(this.txtAge.getText());
+                final var willPublish = publishCheckBox.isSelected();
+
+                final var names = name.split(" ");
+                if (names.length > 1) {
+                    personListing.addPerson(new Person(name, age, willPublish));
+                    setVisible(false);
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+
+
+        });
+        cmdClose.addActionListener((event) -> this.setVisible(false));
 
         pnlCommand.add(cmdSave);
         pnlCommand.add(cmdClose);
@@ -37,7 +62,6 @@ public class PersonEntry extends JFrame {
         add(pnlCommand, BorderLayout.SOUTH);
         pack();
         setVisible(true);
-
     }
 
 
